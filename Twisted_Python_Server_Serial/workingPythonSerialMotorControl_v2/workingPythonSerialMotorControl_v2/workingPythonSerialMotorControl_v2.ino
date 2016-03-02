@@ -9,7 +9,7 @@ int angle;
 void setup() {
   car.begin(); //initialize the car using the encoders and the gyro
   Serial.begin(9600);
-  
+
 }
 
 void loop() {
@@ -18,12 +18,12 @@ void loop() {
 
     car.setSpeed(speed);
     car.setAngle(angle);
-      
+
 
 
     commandComplete = false;
   }
- 
+
 }
 
 /*
@@ -34,15 +34,42 @@ void loop() {
  */
 void serialEvent() {
   int i = 0;
+  int speed
+  byte tmp;
+  byte byteArray[7];
   while (Serial.available()) {
-    i++;
-    byte bytearray[7] = (byte)Serial.read();
-    Serial.println();
-    
 
+    byte b = Serial.read();
 
-    if (bytearray[i] == '\n') {
-      commandComplete = true;
+    byteArray[i] = b;
+    if (b == 0x0d){
+      tmp = 0x0d;
     }
+    if(b == 0x0a && tmp == 0x0d){
+       Serial.println("got CRLF");
+       handleMsg(byteArray);
+     }
+    i++;
   }
+}
+
+void handleMsg(byte arr[])
+{
+    if(arr[1] == 0x46)
+    {
+      speed = arr[3];
+    }
+    else if(arr[1] == 0x42)
+    {
+      speed = -arr[1];
+    }
+    if(arr[2] == 0x52)
+    {
+      angle = arr[4];
+    }
+    else if(arr[2] == 0x4c)
+    {
+      angle = -arr[4];
+    }
+    commandComplete = true;
 }
