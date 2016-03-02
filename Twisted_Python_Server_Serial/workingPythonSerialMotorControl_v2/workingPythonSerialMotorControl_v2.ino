@@ -19,7 +19,7 @@ void loop() {
     car.setSpeed(speed);
     car.setAngle(angle);
 
-
+    Serial.println("set speed" + speed);
 
     commandComplete = false;
   }
@@ -36,6 +36,7 @@ void serialEvent() {
   int i = 0;
   byte tmp;
   byte byteArray[7];
+  
   for(int i = 0; i < 7; i++){
     byteArray[i] = 0;
     }
@@ -51,12 +52,13 @@ void serialEvent() {
     {
        Serial.println("got CRLF");
        handleMsg(byteArray);
+       commandComplete = true;
      }
      
     i++;
   }
   for(int j = 0; j < 7; j++){
-    Serial.write(byteArray[j]);
+    //zSerial.write(byteArray[j]);
     handleMsg(byteArray);
   }
 
@@ -64,11 +66,12 @@ void serialEvent() {
 
 void handleMsg(byte arr[])
 {
-    Serial.println("handleMSG");
-    Serial.write(arr[1]);
-   
+  //  Serial.println("handleMSG");
+    Serial.print(">");
+    Serial.print(arr[0]);
+    Serial.print("<");
     
-    if(arr[1] == 70)
+    if(arr[1] == 0x46)
     {
       Serial.println("F");
       speed = arr[3];
@@ -78,7 +81,7 @@ void handleMsg(byte arr[])
       Serial.println("B");
       speed = -arr[1];
     }
-    if(arr[2] == 0x52)
+    if(arr[2] == 82)
     {
       Serial.println("R");
       angle = arr[4];
@@ -87,6 +90,8 @@ void handleMsg(byte arr[])
     {
       Serial.println("L");
       angle = -arr[4];
+       
+      
     }
-    commandComplete = true;
+    
 }
