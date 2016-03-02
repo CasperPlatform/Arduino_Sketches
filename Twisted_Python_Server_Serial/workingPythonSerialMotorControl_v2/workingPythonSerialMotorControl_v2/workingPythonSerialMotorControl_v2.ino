@@ -13,7 +13,7 @@ void setup() {
 }
 
 void loop() {
-
+ 
   if (commandComplete) {
 
     car.setSpeed(speed);
@@ -34,41 +34,58 @@ void loop() {
  */
 void serialEvent() {
   int i = 0;
-  int speed
   byte tmp;
   byte byteArray[7];
+  for(int i = 0; i < 7; i++){
+    byteArray[i] = 0;
+    }
   while (Serial.available()) {
 
     byte b = Serial.read();
-
+    
     byteArray[i] = b;
     if (b == 0x0d){
       tmp = 0x0d;
     }
-    if(b == 0x0a && tmp == 0x0d){
+    if(b == 0x0a && tmp == 0x0d)
+    {
        Serial.println("got CRLF");
        handleMsg(byteArray);
      }
+     
     i++;
   }
+  for(int j = 0; j < 7; j++){
+    Serial.write(byteArray[j]);
+    handleMsg(byteArray);
+  }
+
 }
 
 void handleMsg(byte arr[])
 {
-    if(arr[1] == 0x46)
+    Serial.println("handleMSG");
+    Serial.write(arr[1]);
+   
+    
+    if(arr[1] == 70)
     {
+      Serial.println("F");
       speed = arr[3];
     }
     else if(arr[1] == 0x42)
     {
+      Serial.println("B");
       speed = -arr[1];
     }
     if(arr[2] == 0x52)
     {
+      Serial.println("R");
       angle = arr[4];
     }
     else if(arr[2] == 0x4c)
     {
+      Serial.println("L");
       angle = -arr[4];
     }
     commandComplete = true;
