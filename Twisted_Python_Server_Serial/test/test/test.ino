@@ -21,17 +21,17 @@ void loop() {
 
     if(byteArray[1] == 0x46)
     {
-   
       speed = byteArray[3];
     }
     else if(byteArray[1] == 0x42)
     {
-     
       speed = -byteArray[1];
+    }
+    else if(byteArray[1] == 0x49){
+      speed = 0;
     }
     if(byteArray[2] == 0x52)
     {
-      
       angle = byteArray[4];
     }
     else if(byteArray[2] == 0x4c)
@@ -39,6 +39,9 @@ void loop() {
       
       angle = -byteArray[4];
     }   
+    else if(byteArray[2] == 0x49){
+      angle = 0;   
+    }
     car.setSpeed(speed);
     car.setAngle(angle);
     Complete = false;
