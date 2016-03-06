@@ -1,21 +1,29 @@
 #include <Smartcar.h>
 
+// Declare the car Object
 Car car;
 
+// Variable to check if entire message is read
 boolean Complete = false;  // whether the string is complete
+
+// Default Speed and Angle
 int speed=0;
 int angle=0;
+
+// Message stored in byteArray
 byte byteArray[5];
+
+// Message size counter
 int j=0;
-String bajs ="";
+
 void setup() {
   car.begin(); //initialize the car using the encoders and the gyro
-  Serial.begin(9600);
+  Serial.begin(9600); // Initialize the Serial connection
 
 }
 void loop() {
   
-  
+   // If Message is complete check command for instructions
   if (Complete) {
 
 
@@ -42,10 +50,16 @@ void loop() {
     else if(byteArray[2] == 0x49){
       angle = 0;   
     }
+
+    // Carry out Instructions
     car.setSpeed(speed);
     car.setAngle(angle);
+
+    // Reset for new Message
     Complete = false;
     j=0;
+
+    // Empty old message to make space for new
     for(int i = 0; i < 5; i++){
     byteArray[i] = 0;
     }
@@ -66,18 +80,21 @@ void serialEvent() {
     // get the new byte:
     byte inByte = (byte)Serial.read();
 
+    // Store message byte in Array
     byteArray[j] = inByte;
-
+    
+      // Increment in wait for new byte
       j++;
+      
+    // Look for CRLF message complete
     if (inByte == 0x0d){
       tmp = 0x0d;
     }
     if(inByte == 0x0a && tmp == 0x0d)
     {
-   
+       // Got CRLF
        Complete = true;
      }
-
 
   }
 }
