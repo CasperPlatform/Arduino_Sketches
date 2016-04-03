@@ -1,4 +1,5 @@
 #include <Smartcar.h>
+#include "Timer.h"
 
 // Declare the car Object
 Car car;
@@ -16,12 +17,29 @@ byte byteArray[6];
 // Message size counter
 int j=0;
 
+
+
+unsigned long lastCommand;
+unsigned long timer;
+
 void setup() {
   car.begin(); //initialize the car using the encoders and the gyro
   Serial.begin(9600); // Initialize the Serial connection
 
 }
 void loop() {
+ 
+time = millis();
+  
+    // If the car dosent recive a command for 2 seconds stop
+   if(!Complete && (timer - lastCommand) > 2000){
+    speed = 0;
+    angle = 0;
+    // Carry out Instructions
+    car.setSpeed(speed);
+    car.setAngle(angle);
+   }
+  
   
    // If Message is complete check command for instructions
   if (Complete) {
@@ -54,7 +72,7 @@ void loop() {
     // Carry out Instructions
     car.setSpeed(speed);
     car.setAngle(angle);
-
+    lastCommand = millis();
     // Reset for new Message
     Complete = false;
     j=0;
