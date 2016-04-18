@@ -29,10 +29,10 @@ void setup() {
 }
 void loop() {
  
-time = millis();
+timer = millis();
   
-    // If the car dosent recive a command for 2 seconds stop
-   if(!Complete && (timer - lastCommand) > 2000){
+    // If the car dosent recive a command for 1 seconds stop
+   if(!Complete && (timer - lastCommand) > 1000){
     speed = 0;
     angle = 0;
     // Carry out Instructions
