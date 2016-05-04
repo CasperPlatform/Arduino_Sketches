@@ -52,31 +52,31 @@ void loop() {
       // If Message is complete check command for instructions
   if (Complete) {
 
-
+    // Speed
     if(byteArray[1] == 0x46)
     {
-      Speed =  90 + byteArray[3];
-      if(Speed > 140){
-        Speed = 140;
+      Speed =  90 - byteArray[3];
+      if(Speed < 20){
+        Speed = 20;
       }
     }
     else if(byteArray[1] == 0x42)
     {
-      Angle = 90 + byteArray[3];
-      if(Angle > 120){
-        Angle = 120;
+      Speed = 90 + byteArray[3];
+      if(Speed > 140){
+        Speed = 140;
       }
-      
     }
     else if(byteArray[1] == 0x49){
       Speed = 90;
-
     }
+
+    // Steering
     if(byteArray[2] == 0x52)
     {
-            Speed = 90 - byteArray[4];
-      if(Speed < 50){
-        Speed = 50;
+      Angle = 90 + byteArray[4];
+      if(Angle > 120){
+        Angle = 120;
       }
     }
     else if(byteArray[2] == 0x4c)
@@ -91,6 +91,9 @@ void loop() {
       Angle = 90;   
     }
 
+    
+    steering.write(Angle);
+    ESC.write(Speed);
     // Carry out Instructions
     lastCommand = millis();
     // Reset for new Message
@@ -102,8 +105,7 @@ void loop() {
     byteArray[i] = 0;
     }
   }
-    steering.write(Angle);
-    ESC.write(Speed);
+
 
 }
 
