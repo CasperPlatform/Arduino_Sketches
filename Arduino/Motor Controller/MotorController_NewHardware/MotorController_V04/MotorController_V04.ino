@@ -31,7 +31,9 @@ ESC.attach(10);
 steering.attach(9);
 
 steering.write(90);
-ESC.write(90); 
+ESC.writeMicroseconds(1000);
+delay(1000);
+ESC.writeMicroseconds(1500);
 
 }
 
@@ -55,7 +57,7 @@ void loop() {
     // Speed reversed for calibration issues
     if(byteArray[1] == 0x46)
     {
-      Speed =  90 + (int)(((float)byteArray[3]/90.0)*50);
+      Speed =  120 + byteArray[3];
       if(Speed > 140){
         Speed = 140;
       }
@@ -63,7 +65,7 @@ void loop() {
     }
     else if(byteArray[1] == 0x42)
     {
-      Speed = 90 - (int)(((float)byteArray[3]/90.0)*50);
+      Speed = 70 - byteArray[3];
       if(Speed < 40){
         Speed = 40;
       }
@@ -133,46 +135,7 @@ void serialEvent() {
       
     // Look for CRLF message complete
     if (inByte == 0x0d){
-      CR 
-#include <SoftwareServo.h> 
-
-SoftwareServo myservo;  // create servo object to control a servo 
-
-#define pinServo A0
-
-int speed = 1;
-int limits[2] = {30,150}; // set limitations (min/max: 0->180)
-boolean refresh = false;  // toggle refresh on/off
-
-void setup() 
-{ 
-  Serial.begin(9600);
-
-  // attaches the servo on pin to the servo object
-  myservo.attach(pinServo);  
-
-  // init angle of servo inbetween two limitations
-  myservo.write((limits[1]-limits[0])/2); 
-} 
-
-void loop() 
-{ 
-  // refresh angle
-  int angle = myservo.read();
-
-  // change direction when limits
-  if (angle >= limits[1] || angle <= limits[0])  speed = -speed;
-
-  myservo.write(angle + speed); 
-
-  // set refresh one time / 2
-  refresh = refresh ? false : true;
-  if (refresh) SoftwareServo::refresh();
-
-  Serial.print("Angle: ");
-  Serial.println(angle);
-} 
-= 0x0d;
+      CR = 0x0d;
     }
     if (inByte == 0x0a){
       LF = 0x0a;

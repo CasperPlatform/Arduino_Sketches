@@ -74,7 +74,7 @@ void loop() {
   }
 
  if(c == 'f'){
-    value = 200;
+    value = 180;
   }
   
   }
