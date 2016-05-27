@@ -10,10 +10,8 @@ void setup() {
 // ESC attached to pin 9 
 ESC.attach(10);
   
-// start serial at 9600 baud
-Serial.begin(9600);   
-ESC.write(0);
-delay(1000);
+// start serial at 115200 baud
+Serial.begin(115200);   
 ESC.write(90); 
 
 }
@@ -53,13 +51,13 @@ void loop() {
   }
 
       if(c == '6'){
-    value = 150;
+    value = 60;
   }
       if(c == '7'){
-    value = 160;
+    value = 70;
   }
         if(c == '8'){
-    value = 180;
+    value = 80;
   }
 
   

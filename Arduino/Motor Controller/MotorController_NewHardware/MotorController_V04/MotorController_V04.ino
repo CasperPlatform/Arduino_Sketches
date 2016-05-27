@@ -31,9 +31,7 @@ ESC.attach(10);
 steering.attach(9);
 
 steering.write(90);
-ESC.writeMicroseconds(1000);
-delay(1000);
-ESC.writeMicroseconds(1500);
+ESC.write(90);
 
 }
 
@@ -57,17 +55,25 @@ void loop() {
     // Speed reversed for calibration issues
     if(byteArray[1] == 0x46)
     {
-      Speed =  120 + byteArray[3];
-      if(Speed > 140){
-        Speed = 140;
+      Speed =  90 + (int)(((double)(byteArray[3]))/90.0*30.0);
+      if(Speed > 120){
+        Speed = 120;
+      }
+      else if(Speed < 90)
+      {
+        Speed = 90;
       }
 
     }
     else if(byteArray[1] == 0x42)
     {
-      Speed = 70 - byteArray[3];
-      if(Speed < 40){
-        Speed = 40;
+      Speed = 90 - (int)(((double)(byteArray[3]))/90.0*40.0);
+      if(Speed < 50){
+        Speed = 50;
+      }
+      else if(Speed > 90)
+      {
+        Speed = 90;
       }
     }
     else if(byteArray[1] == 0x49){
@@ -77,17 +83,25 @@ void loop() {
     // Steering
     if(byteArray[2] == 0x52)
     {
-      Angle = 90 + byteArray[4];
+      Angle = 90 + (int)(((double)(byteArray[4]))/90.0*30.0);
       if(Angle > 120){
         Angle = 120;
+      }
+      else if(Angle < 90)
+      {
+        Angle = 90;
       }
     }
     else if(byteArray[2] == 0x4c)
     {
       
-      Angle = 90 -byteArray[4];
+      Angle = 90 - (int)(((double)(byteArray[4]))/90.0*30.0);
       if(Angle < 60){
         Angle = 60;
+      }
+      else if(Angle > 90)
+      {
+        Angle = 90;
       }
     }   
     else if(byteArray[2] == 0x49){

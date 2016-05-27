@@ -22,5 +22,7 @@ void setup() {
 }
 
 void loop() {
+  
   Serial.println(myLidarLite.distance());
+  delay(20);
 }
