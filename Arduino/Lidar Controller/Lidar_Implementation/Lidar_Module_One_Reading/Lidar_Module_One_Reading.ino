@@ -14,13 +14,18 @@
 #include <Wire.h>
 #include <LIDARLite.h>
 
+
+
 LIDARLite myLidarLite;
 
 void setup() {
   Serial.begin(115200);
   myLidarLite.begin();
+   
 }
 
 void loop() {
+  
   Serial.println(myLidarLite.distance());
+  delay(20);
 }

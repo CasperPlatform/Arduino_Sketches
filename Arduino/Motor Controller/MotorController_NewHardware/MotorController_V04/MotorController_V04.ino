@@ -7,7 +7,7 @@ boolean Complete = false;  // whether the string is complete
 
 // 90 is ESC Neautral
 int Speed = 90;
-int Angle = 90;
+int Angle = 100;
 unsigned long lastCommand;
 unsigned long timer;
 
@@ -30,10 +30,8 @@ ESC.attach(10);
 // Servo  attached to pin 10 
 steering.attach(9);
 
-steering.write(90);
-ESC.writeMicroseconds(1000);
-delay(1000);
-ESC.writeMicroseconds(1500);
+steering.write(100);
+ESC.write(90);
 
 }
 
@@ -44,7 +42,7 @@ void loop() {
     // If the car dosent recive a command for 1 seconds stop
    if(!Complete && (timer - lastCommand) > 1000){
     Speed = 90;
-    Angle = 90;
+    Angle = 100;
     // Carry out Instructions
     ESC.write(Speed);
     steering.write(Angle);
@@ -57,17 +55,25 @@ void loop() {
     // Speed reversed for calibration issues
     if(byteArray[1] == 0x46)
     {
-      Speed =  120 + byteArray[3];
-      if(Speed > 140){
-        Speed = 140;
+      Speed =  90 + (int)(((double)(byteArray[3]))/90.0*20.0);
+      if(Speed > 110){
+        Speed = 110;
+      }
+      else if(Speed < 90)
+      {
+        Speed = 90;
       }
 
     }
     else if(byteArray[1] == 0x42)
     {
-      Speed = 70 - byteArray[3];
-      if(Speed < 40){
-        Speed = 40;
+      Speed = 90 - (int)(((double)(byteArray[3]))/90.0*20.0);
+      if(Speed < 70){
+        Speed = 70;
+      }
+      else if(Speed > 90)
+      {
+        Speed = 90;
       }
     }
     else if(byteArray[1] == 0x49){
@@ -77,21 +83,29 @@ void loop() {
     // Steering
     if(byteArray[2] == 0x52)
     {
-      Angle = 90 + byteArray[4];
-      if(Angle > 120){
-        Angle = 120;
+      Angle = 100 + (int)(((double)(byteArray[4]))/90.0*35.0);
+      if(Angle > 135){
+        Angle = 135;
+      }
+      else if(Angle < 100)
+      {
+        Angle = 100;
       }
     }
     else if(byteArray[2] == 0x4c)
     {
       
-      Angle = 90 -byteArray[4];
+      Angle = 100 - (int)(((double)(byteArray[4]))/90.0*40.0);
       if(Angle < 60){
         Angle = 60;
       }
+      else if(Angle > 100)
+      {
+        Angle = 100;
+      }
     }   
     else if(byteArray[2] == 0x49){
-      Angle = 90;   
+      Angle = 100;   
     }
 
     
