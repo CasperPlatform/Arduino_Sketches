@@ -15,10 +15,10 @@ Servo steering;
 
 void setup() {
 // Servo attached to pin 9
-steering.attach(10);
+steering.attach(9);
   
 // start serial at 115200 baud
-Serial.begin(115200);   
+Serial.begin(9600);   
 steering.write(angle); 
 
 }
@@ -32,7 +32,7 @@ void loop() {
  
     
   
-ESC.write(Speed);
+steering.write(angle);
 
 }
 
@@ -45,8 +45,8 @@ void serialEvent() {
 
     angle = input;
 
-     if(angle > 120){
-      angle = 120;
+     if(angle > 135){
+      angle = 135;
      }else if(angle < 60){
       angle = 60;
      }
