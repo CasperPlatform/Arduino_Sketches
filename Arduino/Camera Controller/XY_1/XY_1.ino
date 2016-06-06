@@ -12,7 +12,7 @@ unsigned long timer;
 
 
 // Message stored in byteArray
-byte byteArray[7];
+byte byteArray[6];
 
 // Message size counter
 int j=0;
@@ -22,6 +22,7 @@ Servo Y_servo;
 Servo X_servo;
 
 void setup() {
+    pinMode(13, OUTPUT);
 // start serial at 9600 baud
 Serial.begin(9600);   
 
@@ -101,16 +102,13 @@ void loop() {
     
     Y_servo.write(Y);
     X_servo.write(X);
-    // Carry out Instructions
-    lastCommand = millis();
+    digitalWrite(13,LOW);
     // Reset for new Message
     Complete = false;
+    
     j=0;
   
-    // Empty old message to make space for new
-    for(int i = 0; i < 6; i++){
-    byteArray[i] = 0;
-    }
+
   }
 
 
@@ -127,28 +125,32 @@ void serialEvent() {
      byte CR;
      byte LF;
   while (Serial.available()) {
-     Serial.println("hej");
+     
     // get the new byte:
     byte inByte = (byte)Serial.read();
     // Store message byte in Array
     byteArray[j] = inByte;
-    //Serial.write(byteArray[j]);
-    
-      // Increment in wait for new byte
+   
       j++;
 
-    // Look for CRLF message complete
+    if(j = 6)
+    {
+     
+       // Got CRLF
+       Complete = true;
+     }
+         // Look for CRLF message complete
     if (inByte == 0x0d){
       CR = 0x0d;
     }
     if (inByte == 0x0a){
       LF = 0x0a;
     }
-     
     
     if(CR == 0x0d && LF == 0x0a)
     {
-     
+        digitalWrite(13, HIGH);
+
        // Got CRLF
        Complete = true;
      }
