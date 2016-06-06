@@ -1,5 +1,5 @@
 #include <Servo.h>
-
+#include <Timer.h>
 
 // Variable to check if entire message is read
 boolean Complete = false;  // whether the string is complete
@@ -12,7 +12,7 @@ unsigned long timer;
 
 
 // Message stored in byteArray
-byte byteArray[6];
+byte byteArray[7];
 
 // Message size counter
 int j=0;
@@ -37,16 +37,6 @@ Y_servo.write(90);
 
 void loop() {
 
-   timer = millis();
-  
-    // If the car dosent recive a command for 1 seconds stop
-   if(!Complete && (timer - lastCommand) > 1000){
-    X = 90;
-    Y = 90;
-    // Carry out Instructions
-    X_servo.write(X);
-    Y_servo.write(Y);
-   }
 
  
       // If Message is complete check command for instructions
@@ -55,7 +45,7 @@ void loop() {
     // Right X value
     if(byteArray[1] == 0x52)
     {
-      X =  90 + (int)(((double)(byteArray[2]))/90.0*90.0);
+      X =  90 + (byteArray[2]);
       if(X > 180){
         X = 180;
       }
@@ -67,7 +57,7 @@ void loop() {
     }// Left X value
     else if(byteArray[1] == 0x4C)
     {
-      X = 90 - (int)(((double)(byteArray[2]))/90.0*90.0);
+      X = 90 - (byteArray[2]);
       if(X < 0){
         X = 0;
       }
@@ -81,9 +71,9 @@ void loop() {
     }
 
     // Y value up
-    if(byteArray[2] == 0x55)
+    if(byteArray[3] == 0x55)
     {
-      Y = 90 + (int)(((double)(byteArray[3]))/90.0*90.0);
+      Y = 90 + (byteArray[4]);
       if(Y > 180){
         Y = 180;
       }
@@ -92,10 +82,10 @@ void loop() {
         Y = 90;
       }
     } //Y Value Down
-    else if(byteArray[2] == 0x44)
+    else if(byteArray[3] == 0x44)
     {
       
-      Y = 90 - (int)(((double)(byteArray[3]))/90.0*50.0);
+      Y = 90 - (int)(((double)(byteArray[4]))/90.0*50.0);
       if(Y < 40){
         Y = 40;
       }
@@ -104,7 +94,7 @@ void loop() {
         Y = 90;
       }
     }   
-    else if(byteArray[2] == 0x49){
+    else if(byteArray[3] == 0x49){
       Y = 90;   
     }
 
@@ -118,7 +108,7 @@ void loop() {
     j=0;
   
     // Empty old message to make space for new
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
     byteArray[i] = 0;
     }
   }
@@ -137,16 +127,16 @@ void serialEvent() {
      byte CR;
      byte LF;
   while (Serial.available()) {
+     Serial.println("hej");
     // get the new byte:
     byte inByte = (byte)Serial.read();
-
     // Store message byte in Array
     byteArray[j] = inByte;
     //Serial.write(byteArray[j]);
     
       // Increment in wait for new byte
       j++;
-      
+
     // Look for CRLF message complete
     if (inByte == 0x0d){
       CR = 0x0d;
@@ -154,9 +144,11 @@ void serialEvent() {
     if (inByte == 0x0a){
       LF = 0x0a;
     }
+     
     
     if(CR == 0x0d && LF == 0x0a)
     {
+     
        // Got CRLF
        Complete = true;
      }

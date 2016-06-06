@@ -20,8 +20,8 @@ ESC.write(Speed);
 void loop() {
 
 
-  Serial.print("Value :");
-  Serial.println(Speed);
+//  Serial.print("Value :");
+//  Serial.println(Speed);
 
  
     
