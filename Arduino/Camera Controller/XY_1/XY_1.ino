@@ -12,7 +12,7 @@ unsigned long timer;
 
 
 // Message stored in byteArray
-byte byteArray[6];
+byte byteArray[8];
 
 // Message size counter
 int j=0;
@@ -22,7 +22,6 @@ Servo Y_servo;
 Servo X_servo;
 
 void setup() {
-    pinMode(13, OUTPUT);
 // start serial at 9600 baud
 Serial.begin(9600);   
 
@@ -102,7 +101,6 @@ void loop() {
     
     Y_servo.write(Y);
     X_servo.write(X);
-    digitalWrite(13,LOW);
     // Reset for new Message
     Complete = false;
     
@@ -132,8 +130,6 @@ void serialEvent() {
     byteArray[j] = inByte;
    
       j++;
-
-    if(j = 6)
     {
      
        // Got CRLF
@@ -147,10 +143,10 @@ void serialEvent() {
       LF = 0x0a;
     }
     
-    if(CR == 0x0d && LF == 0x0a)
+    
+    if(inByte == 0x04 && CR == 0x0d && LF == 0x0a)
     {
-        digitalWrite(13, HIGH);
-
+      
        // Got CRLF
        Complete = true;
      }
