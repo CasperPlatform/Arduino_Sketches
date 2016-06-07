@@ -55,9 +55,9 @@ void loop() {
     // Speed reversed for calibration issues
     if(byteArray[1] == 0x46)
     {
-      Speed =  90 + (int)(((double)(byteArray[3]))/90.0*20.0);
-      if(Speed > 110){
-        Speed = 110;
+      Speed =  90 + (int)(((double)(byteArray[3]))/90.0*10.0);
+      if(Speed > 100){
+        Speed = 100;
       }
       else if(Speed < 90)
       {
