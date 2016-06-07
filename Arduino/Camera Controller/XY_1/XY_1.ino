@@ -130,11 +130,6 @@ void serialEvent() {
     byteArray[j] = inByte;
    
       j++;
-    {
-     
-       // Got CRLF
-       Complete = true;
-     }
          // Look for CRLF message complete
     if (inByte == 0x0d){
       CR = 0x0d;
