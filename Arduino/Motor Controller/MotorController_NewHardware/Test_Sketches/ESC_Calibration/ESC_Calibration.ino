@@ -31,7 +31,7 @@ void loop() {
   
   
   if(c == '1'){
-    value = 100;
+    value = 90;
   }
 
   if( c == '2'){
